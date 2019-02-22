@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>XYS-Tools-Phone</title>
+		 <link rel="stylesheet" href="./static/vendor/bootstrap/css/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="card text-white bg-info text-center align-middle p-15">
+		  <div class="card-header">
+			<h3>Tools.Phone-XYS</h3>
+		  </div>
+		</div>
+		
+		<div class="container mt-3">
+			<form>
+				<div class="row">
+					<div class="col-11">
+						<input type="text" class="form-control" id="phone-ipt" placeholder="请输入手机号">
+					</div>
+					
+				 </div>
+				 <div class="row mt-1 mb-3">
+					<div class="col-2">
+					 <button id="submit-btn-handle" type="button" class="btn-fluid btn btn-primary" data-key="phone" data-type="text">查</button>
+					</div>
+					
+				 </div>
+				 
+				 
+			  </form>
+				<div id="show-dom" class="card d-none">
+				  <div class="card-body"></div>
+				</div>
+		</div>
+		
+		<script src="./static/js/jquery.min.js"></script>
+		<script src="./static/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				
+				$("#submit-btn-handle").on("click", function() {
+					var that = this;
+					var val = $("#phone-ipt").val();
+					if (!!!val) {
+						alert('请输入需要查询的内容');
+						return false;
+					}
+					$.getJSON('./api.php?type='+$(that).data('type')+'&key='+$(that).data('key')+"&val="+val, function(ret) {
+						var str = '';
+						if (+ret.code === 1) {
+							str = '查询成功<br />手机号:  '+val+'<br />服务商:  '+ret.data.catName+'<br />归属地:  '+ret.data.province;
+						$("#phone-ipt").val('');
+						} else {
+							str = '错误信息: '+ret.msg;
+						}
+						$('#show-dom').removeClass('d-none').addClass('d-flex');
+						$("#show-dom div").html(str);
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
+
